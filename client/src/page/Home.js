@@ -1,16 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Month from "../components/Month";
-import { getMonth } from "../utils/helper";
-import { useSelector } from "react-redux";
+import {
+  setCurrentMonth,
+  setSmallCalenderCurrentMonth,
+} from "../utils/monthSlice";
+
+import { useSelector, useDispatch } from "react-redux";
 
 const Home = () => {
-  const currMonth = useSelector((store) => store.month.monthIndex);
-  const [currentMonth, setCurrentMonth] = useState(getMonth());
+  const dispatch = useDispatch();
+  const monthIndex = useSelector((store) => store.month.monthIndex);
+  const currentMonth = useSelector((store) => store.month.currentMonth);
+
+  useEffect(() => {
+    dispatch(setCurrentMonth(monthIndex));
+    dispatch(setSmallCalenderCurrentMonth(monthIndex));
+  }, [monthIndex]);
   return (
     <>
-      <div className="flex flex-col">
+      <div className="flex flex-col h-full">
         <Header />
         <div className="flex flex-1">
           <Sidebar />

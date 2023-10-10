@@ -1,37 +1,45 @@
 import React from "react";
 import logo from "../assets/logo.png";
-import { useSelector, useDispatch } from "react-redux";
-import { setMonthIndex } from "../utils/monthSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setMonthIndex, setSmallCalenderMonthIndex } from "../utils/monthSlice";
 import dayjs from "dayjs";
 
 const Header = () => {
-  const currMonth = useSelector((store) => store.month.monthIndex);
+  let monthIndex = useSelector((store) => store.month.monthIndex);
   const dispatch = useDispatch();
   const handlePrev = () => {
-    dispatch(setMonthIndex(currMonth - 1));
+    dispatch(setMonthIndex(monthIndex - 1));
+    dispatch(setSmallCalenderMonthIndex(monthIndex - 1));
   };
+
   const handleNext = () => {
-    dispatch(setMonthIndex(currMonth - 1));
+    dispatch(setMonthIndex(monthIndex + 1));
+    dispatch(setSmallCalenderMonthIndex(monthIndex + 1));
+  };
+  const handleNow = () => {
+    dispatch(setMonthIndex(dayjs().month()));
   };
   return (
     <div className="px-4 py-2 flex items-center">
       <img src={logo} alt="app_logo" className="mr-4 w-8 h-8" />
       <h1 className="mr-10 text-3xl text-gray-500 font-bold">Calender</h1>
-      <button className="border rounded py-1 px-3.5 mr-5">Today</button>
+      <button className="border rounded py-1 px-3.5 mr-5" onClick={handleNow}>
+        Today
+      </button>
       <button
         className=" cursor-pointer text-gray-600 mx-2"
-        onClick={handlePrev()}
+        onClick={handlePrev}
       >
         ◀
       </button>
       <button
         className=" cursor-pointer text-gray-600 mx-2"
-        onClick={handleNext()}
+        onClick={handleNext}
       >
         ▶
       </button>
       <h2 className="ml-4 text-3xl text-gray-500 font-bold">
-        {dayjs(new Date(dayjs().year(), currMonth)).format("MMMM YYYY")}
+        {dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM YYYY")}
       </h2>
     </div>
   );
