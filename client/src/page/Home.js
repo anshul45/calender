@@ -8,11 +8,13 @@ import {
 } from "../utils/monthSlice";
 
 import { useSelector, useDispatch } from "react-redux";
+import EventCart from "../components/EventCart";
 
 const Home = () => {
   const dispatch = useDispatch();
   const monthIndex = useSelector((store) => store.month.monthIndex);
   const currentMonth = useSelector((store) => store.month.currentMonth);
+  const isEventOpen = useSelector((store) => store.toggle.isEventOpen);
 
   useEffect(() => {
     dispatch(setCurrentMonth(monthIndex));
@@ -20,6 +22,8 @@ const Home = () => {
   }, [monthIndex]);
   return (
     <>
+      {isEventOpen && <EventCart />}
+
       <div className="flex flex-col h-full">
         <Header />
         <div className="flex flex-1">
