@@ -1,9 +1,13 @@
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { data } from "../utils/dumy_data";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 
 const Day = ({ day, rowIndex }) => {
+  const { monthIndex } = useSelector((store) => store.month.monthIndex);
   const [dayEvents, setDayEvents] = useState([]);
+
   useEffect(() => {
     const events = data.filter(
       (evt) =>
@@ -11,6 +15,17 @@ const Day = ({ day, rowIndex }) => {
     );
     setDayEvents(events);
   }, [day]);
+
+  useEffect(() => {
+    //fetchEvents();
+  }, []);
+
+  const fetchEvents = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    const response = await axios.post("http://localhost:3001/api/calender", {
+      accessToken,
+    });
+  };
 
   const currentDay = () => {
     return day.format("DD-MM-YYYY") === dayjs().format("DD-MM-YYYY")
@@ -31,7 +46,7 @@ const Day = ({ day, rowIndex }) => {
         {dayEvents?.map((evt, idx) => (
           <div
             key={idx}
-            className={`bg-green-900 text-white p-1 mr-3 text-sm rounded mb-1`}
+            className={`bg-green-900 text-white p-0.5 mr-3 text-sm rounded mb-1 truncate`}
           >
             {evt.summary}
           </div>
